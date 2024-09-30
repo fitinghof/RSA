@@ -40,10 +40,6 @@ class Encrypter {
    public:
     Encrypter(size_t prime_min_bits = 40, size_t prime_max_bits = 50);
 
-    // std::string encrypt(const std::string& data, public_key public_key)
-    // const; std::string decrypt(const std::string& data, public_key
-    // public_key) const;
-
     std::string encrypt(const std::string& data, public_key public_key) const;
     std::string decrypt(const std::string& data) const;
 
