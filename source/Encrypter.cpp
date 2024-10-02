@@ -13,6 +13,7 @@ mpz_class Encrypter::gcd(mpz_class num1, mpz_class num2) {
 mpz_class Encrypter::find_exponent() {
     gmp_randclass rand_gen(gmp_randinit_default);
     rand_gen.seed(time(nullptr));
+    // rand_gen.seed(0);
     while (true) {
         mpz_class exponent = get_random_prime(65000, 100000, rand_gen);
         if (gcd(exponent, this->beta) == 1) return exponent;
@@ -81,6 +82,7 @@ Encrypter::Encrypter(size_t prime_min_bits, size_t prime_max_bits) {
               << (prime_min_bits * 2) / 8 << "\n";
     gmp_randclass rand_gen(gmp_randinit_default);
     rand_gen.seed(time(nullptr));
+    // rand_gen.seed(0);
     this->prime_one =
         get_random_prime(mpz_class(1) << prime_min_bits,
                          mpz_class(1) << prime_max_bits, rand_gen);
@@ -90,6 +92,12 @@ Encrypter::Encrypter(size_t prime_min_bits, size_t prime_max_bits) {
     this->beta = (this->prime_one - 1) * (this->prime_two - 1);
     this->public_part = {prime_one * prime_two, this->find_exponent()};
     this->d = mod_inverse(this->public_part.exponent, this->beta);
+}
+
+Encrypter::Encrypter(mpz_class prime_one, mpz_class prime_two, mpz_class beta,
+                     mpz_class d)
+    : prime_one(prime_one), prime_two(prime_two), beta(beta), d(d) {
+    this->calculate_public_key();
 }
 
 mpz_class Encrypter::string_to_bigNum(const std::string& str) const {
@@ -130,3 +138,11 @@ std::string Encrypter::decrypt(const std::string& data) const {
 }
 
 public_key Encrypter::get_public_key() const { return this->public_part; }
+mpz_class Encrypter::get_prime_one() const { return this->prime_one; }
+mpz_class Encrypter::get_prime_two() const { return this->prime_two; }
+mpz_class Encrypter::get_beta() const { return this->beta; }
+mpz_class Encrypter::get_d() const { return this->d; }
+
+void Encrypter::set_public_key(mpz_class prime_product, mpz_class exponent) {
+    this->public_part = {prime_product, exponent};
+}

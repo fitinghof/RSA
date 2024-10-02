@@ -12,11 +12,11 @@ OBJECTS = $(patsubst $(SOURCEFOLDER)/%.cpp, $(BINARYFOLDER)/%.o, $(SOURCES))
 
 # Executable output
 OUTPUT = main.exe
-MAIN = $(SOURCEFOLDER)/main.cpp  # Corrected path
 
 # Compiler settings
-ARGS = -Wall -O2
+ARGS = -std=c++17 -Wall -O0
 CC = g++
+LIBS = -L/usr/local/lib -lgmp -lgmpxx  # Adjusted for your GMP installation
 
 # Default target
 default: $(OUTPUT)
@@ -27,10 +27,10 @@ run: $(OUTPUT)
 
 # Link the final executable
 $(OUTPUT): $(OBJECTS)
-	$(CC) $(ARGS) -o $@ $^ -lgmp -lgmpxx
+	$(CC) -static $(ARGS) -o $@ $^ $(LIBS)
 
 # Compile each source file into an object file
-$(BINARYFOLDER)/%.o: $(SOURCEFOLDER)/%.cpp
+$(BINARYFOLDER)/%.o: $(SOURCEFOLDER)/%.cpp $(HEADERS)
 	@mkdir -p $(BINARYFOLDER)  # Ensure binary folder exists
 	$(CC) $(ARGS) -c $< -o $@
 

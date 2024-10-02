@@ -1,29 +1,49 @@
 #include <fstream>
 #include <iostream>
 
-#include "../headers/User.hpp"
-#include "../headers/poem.hpp"
+#include "../headers/User_interface.hpp"
 
 int main(int argc, char* args[]) {
-    static const size_t lower_prime_size = 5000;
-    User user1("Simon", lower_prime_size, lower_prime_size + 100);
-    User user2("Pelle", lower_prime_size, lower_prime_size + 100);
+    User_interface ui;
+    while (true) {
+        std::cout << "1. Decrypt message\n"
+                     "2. Add friend\n"
+                     "3. Print your public key\n"
+                     "4. Encrypt message\n"
+                     "5. Quit\n";
 
-    user1.send_message(
-        user2,
-        "Hello, this is my diary, it is very long thanks to my very great and "
-        "very duper long primes. Thanks for coming to my ted talk.\n",
-        true);
-
-    user1.send_message(user2, poem, true);
-
-    std::cout << "encrypted message:\n"
-              << user2.read_message_undecrypted() << "\n\n";
-    std::cout << "exponent:\n" << user2.get_public_key().exponent << "\n\n";
-    std::cout << "prime product:\n"
-              << user2.get_public_key().prime_product << "\n\n";
-
-    std::cout << user2.read_message() << "\n";
-    std::cout << user2.read_message() << "\n";
-    std::cout << poem.size() << "\n";
+        size_t choice;
+        while (true) {
+            try {
+                std::cin >> choice;
+            } catch (...) {
+            }
+            if (choice > 0 && choice <= 5) break;
+        }
+        try {
+            switch (choice) {
+                case 1:
+                    ui.decrypt_message();
+                    break;
+                case 2:
+                    ui.add_friend();
+                    break;
+                case 3:
+                    ui.print_public_user_data();
+                    break;
+                case 4:
+                    ui.encrypt_message();
+                    break;
+                case 5:
+                    return 0;
+                default:
+                    throw std::runtime_error("Something went terribly wrong");
+            }
+        } catch (...) {
+            std::cout << "I have implemented so called lazy error handling, or "
+                         "not really errorhandling at all, point is, you "
+                         "fucked something and if your lucky nothing got "
+                         "fucked up howerver I make no garantees.\n";
+        }
+    }
 }

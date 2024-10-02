@@ -15,6 +15,11 @@ class Message {
         : from(from), to(to), encryption(encryption), message(message){};
     ~Message() { return; };
 
+    Message(Message&&) = default; // Default move constructor
+    Message& operator=(Message&&) = default; // Default move assignment operator
+    Message(const Message&) = default; // Default copy constructor
+    Message& operator=(const Message&) = default; // Default copy assignment operator
+
     std::string get_from() const { return from; }
     std::string get_to() const { return to; }
     std::string get_encryption() const { return encryption; }
